@@ -6,7 +6,7 @@
 %define haproxy_confdir %{_sysconfdir}/haproxy
 %define haproxy_datadir %{_datadir}/haproxy
 
-%define version 1.5.3
+%define version 1.5.12
 #%define dev_rel dev25
 #%define release 1
 
@@ -85,20 +85,6 @@ rm -rf %{buildroot}
 %pre
 %{_sbindir}/groupadd -g %{haproxy_gid} -r %{haproxy_group} 2>/dev/null || :
 %{_sbindir}/useradd -u %{haproxy_uid} -g %{haproxy_group} -d %{haproxy_home} -s /sbin/nologin -r %{haproxy_user} 2>/dev/null || :
-
-%post
-/sbin/chkconfig --add haproxy
-
-%preun
-if [ "$1" -eq 0 ]; then
-    /sbin/service haproxy stop >/dev/null 2>&1
-    /sbin/chkconfig --del haproxy
-fi
-
-%postun
-if [ "$1" -ge 1 ]; then
-    /sbin/service haproxy condrestart >/dev/null 2>&1 || :
-fi
 
 %files
 %defattr(-,root,root,-)
